@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DonationsProject.Classes.Website;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,12 @@ namespace DonationsProject
         public MainWindow()
         {
             InitializeComponent();
+            GetDataFromWebsite();
+        }
+
+        public void GetDataFromWebsite()
+        {
+            WebsiteCrawler.Instance.ConnectToWebsite();
         }
     }
 }
