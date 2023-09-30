@@ -27,9 +27,9 @@ namespace DonationsProject
             GetDataFromWebsite();
         }
 
-        public void GetDataFromWebsite()
+        public async void GetDataFromWebsite()
         {
-            WebsiteCrawler.Instance.ConnectToWebsite();
+            await WebsiteCrawler.Instance.ConnectToWebsite();
         }
     }
 }

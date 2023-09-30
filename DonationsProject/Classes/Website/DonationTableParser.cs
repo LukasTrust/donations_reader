@@ -10,21 +10,66 @@ namespace DonationsProject.Classes.Website
 {
     public class DonationTableParser
     {
-        public const string pattern = @"<tr><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td colspan=""3"">(.*?)<\/td><\/tr>";
-
-        public static void ParseHtmlTable(string html)
+        public static DonationTableParser Instance
         {
+            get
+            {
+                if (_Instance == null)
+                {
+                    _Instance = new DonationTableParser();
 
-            // Use a regular expression to match rows of the table
+                }
+                return _Instance;
+            }
+        }
 
-            Regex regex = new Regex(pattern);
+        private static DonationTableParser _Instance { get; set; }
 
-            MatchCollection matches = Regex.Matches(html, pattern);
+        private const string pattern = @"<tr><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td>(.*?)<\/td><td colspan=""3"">(.*?)<\/td><\/tr>";
+        private const string linkPattern2009 = @"<a\b[^>]*\bhref\s*=\s*[""'](?<url>.*?)[""'][^>]*>";
+        private const string patternBefor2014 = @"<tr><td><p>(.*?)<\/p><\/td><td><p>(.*?)<\/p><\/td><td><p>(.*?)<\/p><\/td><td><p>(.*?)<\/p><\/td><td><p>(.*?)<\/p><\/td><\/tr>";
+        public async Task ParseHtmlTable(string html, bool befor2015, bool before2009)
+        {
+            MatchCollection matches = null;
 
+            if (before2009)
+            {
+                List<string> links = ExtractLinksFromHtml2009(html);
+                foreach(string link in links)
+                {
+                    string test = await WebsiteCrawler.Instance.DownloadPdfContentAsync(link);
+                }
+            }
+            if (befor2015)
+            {
+                matches = Regex.Matches(html, patternBefor2014);
+                foreach (Match match in matches)
+                {
+                    await Donation.CreateDonationBevor2015(match);
+                }
+            }else
+            {
+                matches = Regex.Matches(html, pattern);
+
+                foreach (Match match in matches)
+                {
+                    await Donation.CreateDonation(match);
+                }
+            }
+        }
+
+        public List<string> ExtractLinksFromHtml2009(string html)
+        {
+            MatchCollection matches = Regex.Matches(html, linkPattern2009);
+            List<string> links = new List<string>();
             foreach (Match match in matches)
             {
-                Donation.CreateDonation(match);
+                if (match.Success)
+                {
+                    links.Add(match.Groups["url"].Value);
+                }
             }
+            return links;
         }
     }
 }
