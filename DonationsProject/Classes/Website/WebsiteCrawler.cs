@@ -59,16 +59,18 @@ namespace DonationsProject.Classes.Website
 
         public async Task<string> DownloadPdfContentAsync(string pdfUrl)
         {
-            byte[] pdfBytes = client.DownloadData(pdfUrl);
-
-            PdfReader reader = new PdfReader(pdfBytes);
-
             StringWriter output = new StringWriter();
-
-            for (int i = 1; i <= reader.NumberOfPages; i++)
+            await Task.Run(() =>
             {
-                output.WriteLine(PdfTextExtractor.GetTextFromPage(reader, i));
-            }
+                byte[] pdfBytes = client.DownloadData(pdfUrl);
+
+                PdfReader reader = new PdfReader(pdfBytes);
+
+                for (int i = 1; i <= reader.NumberOfPages; i++)
+                {
+                    output.WriteLine(PdfTextExtractor.GetTextFromPage(reader, i));
+                }
+            });
 
             return output.ToString();
         }

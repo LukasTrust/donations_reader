@@ -20,14 +20,21 @@ namespace DonationsProject.Classes.Objects
         public static async Task CreateDonation(Match match)
         {
             Donation donation = new Donation();
-            await Task.Run(() => {
+            await Task.Run(() =>
+            {
                 int beginnP = 0;
                 int endP = 0;
                 string forConversion = "";
 
-                beginnP = match.Groups[1].Value.IndexOf('>');
-                endP = match.Groups[1].Value.IndexOf('<', beginnP);
-                donation.Party = match.Groups[1].Value.Substring(beginnP + 1, endP - beginnP - 1);
+                forConversion = match.Groups[1].Value;
+                beginnP = forConversion.IndexOf('>');
+                endP = forConversion.IndexOf('<', beginnP);
+                forConversion = forConversion.Substring(beginnP + 1, endP - beginnP - 1);
+                if (forConversion.Contains("&nbsp;"))
+                {
+                    forConversion = forConversion.Replace("&nbsp;", "");
+                }
+                donation.Party = forConversion;
 
                 beginnP = match.Groups[2].Value.IndexOf('>');
                 endP = match.Groups[2].Value.IndexOf('<', beginnP);
@@ -72,6 +79,92 @@ namespace DonationsProject.Classes.Objects
             Donations.Add(donation);
         }
 
+        public static async Task CreateDonationBevor2009(string content)
+        {
+            if (content.Length < 30)
+            {
+                return;
+            }
+            Donation donation = new Donation();
+            string[] splitContent = content.Split(' ');
+            donation.Party = splitContent[0];
+            int ammoutIndex = -1;
+
+            try
+            {
+                double convertTest = Convert.ToDouble(splitContent[2]);
+                string ammout = splitContent[1] + splitContent[2];
+                donation.Amount = Convert.ToDouble(ammout);
+                ammoutIndex = 2;
+            }
+            catch
+            {
+                try
+                {
+                    donation.Amount = Convert.ToDouble(splitContent[1]);
+                    ammoutIndex = 1;
+                }
+                catch
+                {
+                    string ammout = splitContent[splitContent.Length - 2] + splitContent[splitContent.Length - 1];
+                    try
+                    {
+                        donation.Amount = Convert.ToDouble(ammout);
+                        if (donation.Amount > 10000000)
+                        {
+                            return;
+                        }
+                        ammoutIndex = splitContent.Length - 2;
+                    }
+                    catch
+                    {
+                        return;
+                    }
+                }
+            }
+            int receiptDateIndex = -1;
+            for (int i = 0; i < splitContent.Length; i++)
+            {
+                try
+                {
+                    string cleanString = splitContent[i];
+                    cleanString = cleanString.Replace("per", "");
+                    DateTime convertTest = Convert.ToDateTime(cleanString);
+                    donation.ReceiptDate = convertTest;
+                    receiptDateIndex = i;
+                    break;
+                }
+                catch
+                {
+
+                }
+            }
+            if (receiptDateIndex != -1)
+            {
+                try
+                {
+                    donation.ReportLink = Convert.ToDateTime(splitContent[receiptDateIndex + 1]);
+                }
+                catch
+                {
+                    return;
+                }
+            }
+
+            string donor = "";
+            for (int i = 0 + 1; i < splitContent.Length; i++)
+            {
+                if (i != receiptDateIndex && i != receiptDateIndex + 1 && i != ammoutIndex && i != ammoutIndex + 1)
+                {
+                    donor += splitContent[i] + " ";
+                }
+            }
+            donor = donor.Replace("\n", "");
+            donor = donor.TrimEnd(' ');
+            donor = donor.Replace("- ", "");
+            donation.Donor = donor;
+            Donations.Add(donation);
+        }
         public static async Task CreateDonationBevor2015(Match match)
         {
             Donation donation = new Donation();
@@ -80,8 +173,12 @@ namespace DonationsProject.Classes.Objects
                 string forConversion = "";
                 int beginnP = 0;
                 int endP = 0;
-
-                donation.Party = match.Groups[1].Value;
+                forConversion = match.Groups[1].Value;
+                if (forConversion.Contains("&nbsp;"))
+                {
+                    forConversion = forConversion.Replace("&nbsp;", "");
+                }
+                donation.Party = forConversion;
 
                 forConversion = match.Groups[2].Value;
                 if (forConversion.Contains("Korrigierter"))
