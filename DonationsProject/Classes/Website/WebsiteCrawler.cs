@@ -101,7 +101,7 @@ namespace DonationsProject.Classes.Website
                 Donor = "Allfinanz Deutsche Vermögensberatung AG",
                 ReceiptDate = new DateTime(2010, 02, 10),
             });
-            Donation.Donations.Clear();
+            await Donation.CleanUpData();
         }
 
         public async Task ConnectToSubWebsite(string link, bool befor2015, bool befor2009)
