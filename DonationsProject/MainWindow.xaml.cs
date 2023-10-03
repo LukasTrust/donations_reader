@@ -1,4 +1,5 @@
 ﻿using DonationsProject.Classes.Database;
+using DonationsProject.Classes.Objects;
 using DonationsProject.Classes.Website;
 using System;
 using System.Collections.Generic;
@@ -26,18 +27,18 @@ namespace DonationsProject
         public MainWindow()
         {
             InitializeComponent();
-            GetDataFromDatabase();
             GetDataFromWebsite();
         }
 
-        public async void GetDataFromDatabase()
+        public async void SaveDataFromWebsite()
         {
-            DBConnector.Instance.GetDate();
+            await DBConnector.Instance.InsertDonations(Donation.Donations);
         }
 
         public async void GetDataFromWebsite()
         {
             await WebsiteCrawler.Instance.ConnectToWebsite();
+            SaveDataFromWebsite();
         }
     }
 }
