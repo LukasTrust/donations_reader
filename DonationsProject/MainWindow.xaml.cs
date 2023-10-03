@@ -1,6 +1,8 @@
-﻿using DonationsProject.Classes.Website;
+﻿using DonationsProject.Classes.Database;
+using DonationsProject.Classes.Website;
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,7 +26,13 @@ namespace DonationsProject
         public MainWindow()
         {
             InitializeComponent();
+            GetDataFromDatabase();
             GetDataFromWebsite();
+        }
+
+        public async void GetDataFromDatabase()
+        {
+            DBConnector.Instance.GetDate();
         }
 
         public async void GetDataFromWebsite()
