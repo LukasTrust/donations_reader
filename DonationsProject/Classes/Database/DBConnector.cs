@@ -41,13 +41,14 @@ namespace DonationsProject.Classes.Database
             }
         }
 
+        #region WriteToDB
         public async Task InsertDonations(List<Donation> donations)
         {
             if (connection == null)
             {
                 Connect();
             }
-            await ClearAllTables();
+
             // Insert into Dates table
             List<int> dateReceiptId = await InsertDonationDate(donations.Select(x => x.ReceiptDate).ToList());
 
@@ -72,7 +73,7 @@ namespace DonationsProject.Classes.Database
                 Connect();
             }
 
-            string[] tableNames = { "Donations", "Parties", "DonationDates", "ReportDates", "Amounts", "Doners" };
+            string[] tableNames = { "Donations", "Parties", "DonationDates", "ReportDates", "Amounts", "Donors" };
 
             foreach (var tableName in tableNames)
             {
@@ -176,7 +177,7 @@ namespace DonationsProject.Classes.Database
         private async Task<List<int>> InsertDonor(List<string> donors)
         {
             List<object> list = donors.Cast<object>().ToList();
-            return await Insert("Doners", "Name", list);
+            return await Insert("Donors", "Name", list);
         }
 
         private async Task<List<int>> InsertParty(List<string> parties)
@@ -208,11 +209,11 @@ namespace DonationsProject.Classes.Database
                 int startIndex = batchIndex * batchSize;
                 int endIndex = Math.Min((batchIndex + 1) * batchSize, itemCount);
 
-                StringBuilder insertDonationQuery = new StringBuilder("INSERT INTO Donations (FK_DonationDate, FK_ReportDate, FK_Doner, FK_Party, FK_Amount) VALUES ");
+                StringBuilder insertDonationQuery = new StringBuilder("INSERT INTO Donations (FK_DonationDate, FK_ReportDate, FK_Donor, FK_Party, FK_Amount) VALUES ");
 
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    insertDonationQuery.Append($"(@FK_DonationDate{i}, @FK_ReportDate{i}, @FK_Doner{i}, @FK_Party{i}, @FK_Amount{i})");
+                    insertDonationQuery.Append($"(@FK_DonationDate{i}, @FK_ReportDate{i}, @FK_Donor{i}, @FK_Party{i}, @FK_Amount{i})");
                     if (i < endIndex - 1)
                         insertDonationQuery.Append(",");
                 }
@@ -223,7 +224,7 @@ namespace DonationsProject.Classes.Database
                     {
                         command.Parameters.AddWithValue($"@FK_DonationDate{i}", dateReceiptIds[i]);
                         command.Parameters.AddWithValue($"@FK_ReportDate{i}", dateReportIds[i]);
-                        command.Parameters.AddWithValue($"@FK_Doner{i}", donorIds[i]);
+                        command.Parameters.AddWithValue($"@FK_Donor{i}", donorIds[i]);
                         command.Parameters.AddWithValue($"@FK_Party{i}", partyIds[i]);
                         command.Parameters.AddWithValue($"@FK_Amount{i}", amounts[i]);
                     }
@@ -232,5 +233,6 @@ namespace DonationsProject.Classes.Database
                 }
             }
         }
+        #endregion
     }
 }
