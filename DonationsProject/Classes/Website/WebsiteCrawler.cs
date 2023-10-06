@@ -99,7 +99,7 @@ namespace DonationsProject.Classes.Website
                 Party = "CDU",
                 Amount = 75000,
                 Donor = "Allfinanz Deutsche Vermögensberatung AG",
-                ReceiptDate = new DateTime(2010, 02, 10),
+                DonationDate = new DateTime(2010, 02, 10),
             });
             await Donation.CleanUpData();
         }

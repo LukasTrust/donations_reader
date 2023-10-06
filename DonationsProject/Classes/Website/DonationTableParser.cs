@@ -51,7 +51,7 @@ namespace DonationsProject.Classes.Website
                         {
                             if (contentList[i].StartsWith(searchTerm))
                             {
-                                await Donation.CreateDonationBevor2009(contentList[i] + " \n" + contentList[i + 1]);
+                                await Donation.CreateDonationFromWebsite2009(contentList[i] + " \n" + contentList[i + 1]);
                             }
                         }
                     }
@@ -63,7 +63,7 @@ namespace DonationsProject.Classes.Website
                 matches = Regex.Matches(html, patternBefor2014);
                 foreach (Match match in matches)
                 {
-                    await Donation.CreateDonationBevor2015(match);
+                    await Donation.CreateDonationFromWebsite2015(match);
                 }
             }
             else
@@ -72,7 +72,7 @@ namespace DonationsProject.Classes.Website
 
                 foreach (Match match in matches)
                 {
-                    await Donation.CreateDonation(match);
+                    await Donation.CreateDonationFromWebsite(match);
                 }
             }
         }

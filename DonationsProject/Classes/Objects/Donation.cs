@@ -9,16 +9,44 @@ namespace DonationsProject.Classes.Objects
 {
     public class Donation
     {
+        #region Statics
+
         public static List<Donation> Donations { get; set; } = new List<Donation>();
+
+        #endregion
+
+        #region Properties  
 
         public string Party { get; set; }
         public double Amount { get; set; }
         public string Donor { get; set; }
-        public DateTime ReceiptDate { get; set; }
-        public DateTime ReportLink { get; set; }
+        public DateTime DonationDate { get; set; }
+        public DateTime ReportDate { get; set; }
 
+        #endregion
 
-        public static async Task CreateDonation(Match match)
+        #region Create from DB
+
+        public static async Task CreateDonationFromDB(object[] data)
+        {
+            Donation donation = new Donation();
+            await Task.Run(() =>
+            {
+                donation.DonationDate = Convert.ToDateTime(data[0]);
+                donation.ReportDate = Convert.ToDateTime(data[1]);
+                donation.Donor = data[2].ToString();
+                donation.Party = data[3].ToString();
+                donation.Amount = Convert.ToDouble(data[4]);
+
+            });
+            Donations.Add(donation);
+        }
+
+        #endregion
+
+        #region Create from Website
+
+        public static async Task CreateDonationFromWebsite(Match match)
         {
             Donation donation = new Donation();
             await Task.Run(() =>
@@ -61,7 +89,7 @@ namespace DonationsProject.Classes.Objects
                     forConversion = forConversion.Remove(10, forConversion.Length - 10);
                 }
 
-                donation.ReportLink = Convert.ToDateTime(forConversion);
+                donation.ReportDate = Convert.ToDateTime(forConversion);
 
                 beginnP = match.Groups[4].Value.IndexOf('>');
                 endP = match.Groups[4].Value.IndexOf('<', beginnP);
@@ -69,18 +97,18 @@ namespace DonationsProject.Classes.Objects
 
                 if (forConversion.Length == 6)
                 {
-                    forConversion = forConversion + donation.ReportLink.Year;
+                    forConversion = forConversion + donation.ReportDate.Year;
                 }
                 forConversion = forConversion.Replace("/", "");
                 forConversion = Regex.Replace(forConversion, "[a-zA-Z]", "");
 
-                donation.ReceiptDate = Convert.ToDateTime(forConversion);
+                donation.DonationDate = Convert.ToDateTime(forConversion);
             });
 
             Donations.Add(donation);
         }
 
-        public static async Task CreateDonationBevor2009(string content)
+        public static async Task CreateDonationFromWebsite2009(string content)
         {
             Donation donation = new Donation();
             await Task.Run(() =>
@@ -133,7 +161,7 @@ namespace DonationsProject.Classes.Objects
                         string cleanString = splitContent[i];
                         cleanString = cleanString.Replace("per", "");
                         DateTime convertTest = Convert.ToDateTime(cleanString);
-                        donation.ReceiptDate = convertTest;
+                        donation.DonationDate = convertTest;
                         receiptDateIndex = i;
                         break;
                     }
@@ -146,11 +174,11 @@ namespace DonationsProject.Classes.Objects
                 {
                     try
                     {
-                        donation.ReportLink = Convert.ToDateTime(splitContent[receiptDateIndex + 1]);
+                        donation.ReportDate = Convert.ToDateTime(splitContent[receiptDateIndex + 1]);
                     }
                     catch
                     {
-                        donation.ReportLink = donation.ReceiptDate;
+                        donation.ReportDate = donation.DonationDate;
                     }
                 }
 
@@ -169,7 +197,7 @@ namespace DonationsProject.Classes.Objects
             });
             Donations.Add(donation);
         }
-        public static async Task CreateDonationBevor2015(Match match)
+        public static async Task CreateDonationFromWebsite2015(Match match)
         {
             Donation donation = new Donation();
             await Task.Run(() =>
@@ -225,7 +253,7 @@ namespace DonationsProject.Classes.Objects
                 {
                     forConversion = match.Groups[4].Value.Remove(0, 4);
                 }
-                donation.ReceiptDate = Convert.ToDateTime(forConversion);
+                donation.DonationDate = Convert.ToDateTime(forConversion);
 
                 forConversion = match.Groups[5].Value;
                 if (forConversion.Contains('<'))
@@ -235,15 +263,19 @@ namespace DonationsProject.Classes.Objects
                 }
                 try
                 {
-                    donation.ReportLink = Convert.ToDateTime(forConversion);
+                    donation.ReportDate = Convert.ToDateTime(forConversion);
                 }
                 catch
                 {
-                    donation.ReportLink = Convert.ToDateTime("12.02.2010");
+                    donation.ReportDate = Convert.ToDateTime("12.02.2010");
                 }
             });
             Donations.Add(donation);
         }
+
+        #endregion
+
+        #region Clean up data
 
         public static async Task CleanUpData()
         {
@@ -256,8 +288,8 @@ namespace DonationsProject.Classes.Objects
                 donationsToChange.AddRange(Donations.Where(x => x.Amount == 0).ToList());
                 donationsToChange.AddRange(Donations.Where(x => x.Amount > 100000000).ToList());
                 donationsToChange.AddRange(Donations.Where(x => x.Donor == null).ToList());
-                donationsToChange.AddRange(Donations.Where(x => x.ReportLink.Year < 2002).ToList());
-                donationsToChange.AddRange(Donations.Where(x => x.ReportLink.Year > 2023).ToList());
+                donationsToChange.AddRange(Donations.Where(x => x.ReportDate.Year < 2002).ToList());
+                donationsToChange.AddRange(Donations.Where(x => x.ReportDate.Year > 2023).ToList());
 
                 foreach (Donation donation in donationsToChange)
                 {
@@ -480,5 +512,7 @@ namespace DonationsProject.Classes.Objects
 
             return cleanedString;
         }
+
+        #endregion
     }
 }
