@@ -134,6 +134,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Classes\Objects\DonationDateSummary.cs" />
+    <Compile Include="Classes\Objects\DonorSummary.cs" />
+    <Compile Include="Classes\Objects\PartySummary.cs" />
     <Compile Include="Classes\Utils\RelayCommand.cs" />
     <Compile Include="ViewModel\MainWindow_VM.cs" />
     <Compile Include="View\MainWindow.xaml.cs">

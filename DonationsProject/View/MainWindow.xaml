@@ -25,13 +25,16 @@
 
             <StackPanel Orientation="Vertical">
                 <Button HorizontalAlignment="Stretch" Command="{Binding GetDataFromWebsiteCommand}" 
-                Content="Load data from the web" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                ToolTip="Load data from the web" Margin="10" FontSize="20"/>
+                Content="Load data again from the web" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
+                ToolTip="Load data again from the web" Margin="10" FontSize="20"/>
 
                 <Button HorizontalAlignment="Stretch" Command="{Binding LoadDataFromDBCommand}" 
                     Content="Load data from database" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
                     ToolTip="Load data from database" Margin="10" FontSize="20"/>
-
+                
+                <Button HorizontalAlignment="Stretch" Command="{Binding LoadDataFromDBCommand}" 
+                    Content="Load data from database" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
+                    ToolTip="Load data from database" Margin="10" FontSize="20"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Column="1">
