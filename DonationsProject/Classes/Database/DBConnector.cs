@@ -281,7 +281,6 @@ namespace DonationsProject.Classes.Database
             {
                 await Donation.CreateDonationFromDB(donation);
             }
-            Donation.Donations.Clear();
         }
 
         private async Task<List<(int Id, object Value)>> ReadDataDetailTableFromDB(string tableName, string columnName)

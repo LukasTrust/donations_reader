@@ -8,6 +8,12 @@ namespace DonationsProject.Classes.Objects
 {
     public class DonorSummary
     {
+        #region Statics
+
+        public static List<DonorSummary> DonorsSummary = new List<DonorSummary>();
+
+        #endregion
+
         #region Properties
         public string DonorName { get; set; }
         public int TotalDonations { get; set; }
@@ -32,58 +38,77 @@ namespace DonationsProject.Classes.Objects
 
         #region Methods
 
-        public async Task CreateDonors(List<Donation> donations)
+        public static async Task CreateDonors(List<Donation> donations)
         {
             List<string> donors = donations.Select(d => d.Donor).Distinct().ToList();
             foreach (string donor in donors)
             {
-                this.Donations = donations.Where(d => d.Donor == this.DonorName).ToList();
-                await FillDataObject();
+                DonorSummary donorSummary = new DonorSummary(donor);
+                donorSummary.Donations = donations.Where(d => d.Donor == donorSummary.DonorName).ToList();
+                await FillDataObject(donorSummary);
+                DonorsSummary.Add(donorSummary);
             }
         }
 
-        public async Task FillDataObject()
+        public static async Task FillDataObject(DonorSummary donorSummary)
         {
-            List<Donation> donations = this.Donations;
-            if (YearToShow != null)
+            List<Donation> donations = donorSummary.Donations;
+            if (donorSummary.YearToShow.Year != 0001)
             {
-                donations = donations.Where(d => d.DonationDate.Year.Equals(YearToShow.Year)).ToList();
+                donations = donations.Where(d => d.DonationDate.Year.Equals(donorSummary.YearToShow.Year)).ToList();
             }
 
-            this.TotalDonations = donations.Count;
-            this.DistinctParties = this.Donations.Select(d => d.Party).Distinct().ToList();
-            this.DonationsCountPerParty = await GetDonationsCountPerParty();
-            this.AmountPerParty = await GetAmountPerParty();
-            this.TotalAmount = donations.Sum(d => d.Amount);
+            donorSummary.TotalDonations = donations.Count;
+            donorSummary.DistinctParties = donorSummary.Donations.Select(d => d.Party).Distinct().ToList();
+            donorSummary.DonationsCountPerParty = await GetDonationsCountPerParty(donorSummary);
+            donorSummary.AmountPerParty = await GetAmountPerParty(donorSummary);
+            donorSummary.TotalAmount = donations.Sum(d => d.Amount);
             double totalTicks = donations.Sum(d => Math.Abs((d.DonationDate - d.ReportDate).Ticks));
             double averageTicks = totalTicks / donations.Count;
-            this.AverageTimeBetweenDonations = TimeSpan.FromTicks((long)averageTicks);
+            donorSummary.AverageTimeBetweenDonations = TimeSpan.FromTicks((long)averageTicks);
         }
 
-        public async Task<Dictionary<string, int>> GetDonationsCountPerParty()
+        public static async Task<Dictionary<string, int>> GetDonationsCountPerParty(DonorSummary donorSummary)
         {
             Dictionary<string, int> DictCount = new Dictionary<string, int>();
             await Task.Run(() =>
             {
-                foreach (string party in DistinctParties)
+                foreach (string party in donorSummary.DistinctParties)
                 {
-                    DictCount.Add(party, this.Donations.Where(d => d.Party == party).Count());
+                    DictCount.Add(party, donorSummary.Donations.Where(d => d.Party == party).Count());
                 }
             });
             return DictCount;
         }
 
-        public async Task<Dictionary<string, double>> GetAmountPerParty()
+        public static async Task<Dictionary<string, double>> GetAmountPerParty(DonorSummary donorSummary)
         {
             Dictionary<string, double> DictAmount = new Dictionary<string, double>();
             await Task.Run(() =>
             {
-                foreach(string party in DistinctParties)
+                foreach(string party in donorSummary.DistinctParties)
                 {
-                    DictAmount.Add(party, this.Donations.Where(d => d.Party == party).Sum(d => d.Amount));
+                    DictAmount.Add(party, donorSummary.Donations.Where(d => d.Party == party).Sum(d => d.Amount));
                 }
             });
             return DictAmount;
+        }
+
+        public static async Task SetYearToShow(bool UpOrDown, DonorSummary donorSummary)
+        {
+            if (donorSummary.YearToShow == null)
+            {
+                donorSummary.YearToShow = DateTime.Now;
+            }
+            else if (UpOrDown)
+            {
+                donorSummary.YearToShow.AddYears(1);
+            }
+            else
+            {
+                donorSummary.YearToShow.AddYears(-1);
+            }
+            await FillDataObject(donorSummary);
         }
 
         #endregion

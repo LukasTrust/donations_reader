@@ -1,0 +1,50 @@
+﻿<UserControl x:Class="DonationsProject.View.PartySummary_UC"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:DonationsProject.View" xmlns:lvc="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid MaxWidth="1500">
+        <StackPanel Orientation="Vertical">
+
+            <ItemsControl ItemsSource="{Binding Lables}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <WrapPanel Orientation="Horizontal"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal" Margin="5">
+                            <Button Content="{Binding}" Command="{Binding DataContext.ShowOtherPartyCommand, 
+                                RelativeSource={RelativeSource AncestorType=UserControl}}" CommandParameter="{Binding}" 
+                                Style="{StaticResource MaterialDesignRaisedLightButton}"/>
+                        </StackPanel>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <TextBlock Text="{Binding Lable}" HorizontalAlignment="Center" FontSize="20" FontWeight="Bold" Margin="0,10,0,20" />
+
+            <lvc:PieChart Series="{Binding PieView}" LegendLocation="Right" Height="700" HorizontalContentAlignment="Left"
+                          MaxWidth="1500">
+                <lvc:PieChart.ChartLegend>
+                    <lvc:DefaultLegend/>
+                </lvc:PieChart.ChartLegend>
+            </lvc:PieChart>
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right"  Margin="0,0,100,0">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Total Sum of donations: " FontSize="20" FontWeight="Bold" />
+                    <TextBlock Text="{Binding TotalAmount}" FontSize="20" FontWeight="Bold" />
+                    <TextBlock Text=" €" FontSize="20" FontWeight="Bold" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Count of donations: " FontSize="20" FontWeight="Bold" />
+                    <TextBlock Text="{Binding TotalDonation}" FontSize="20" FontWeight="Bold" />
+                </StackPanel>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -26,15 +26,19 @@
             <StackPanel Orientation="Vertical">
                 <Button HorizontalAlignment="Stretch" Command="{Binding GetDataFromWebsiteCommand}" 
                 Content="Load data again from the web" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                ToolTip="Load data again from the web" Margin="10" FontSize="20"/>
-
-                <Button HorizontalAlignment="Stretch" Command="{Binding LoadDataFromDBCommand}" 
-                    Content="Load data from database" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                    ToolTip="Load data from database" Margin="10" FontSize="20"/>
+                ToolTip="Load data again from the web" Margin="10" FontSize="20" materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"/>
                 
                 <Button HorizontalAlignment="Stretch" Command="{Binding LoadDataFromDBCommand}" 
                     Content="Load data from database" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
-                    ToolTip="Load data from database" Margin="10" FontSize="20"/>
+                    ToolTip="Load data from database" Margin="10" FontSize="20" materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"/>
+
+                <Button HorizontalAlignment="Stretch" Command="{Binding ShowPartyViewCommand}" 
+                    Content="Show party view" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
+                    ToolTip="Show party view" Margin="10" FontSize="20" materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"/>
+
+                <Button HorizontalAlignment="Stretch" Command="{Binding ShowDonorViewCommand}" 
+                        Content="Show donor view" Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}"
+                        ToolTip="Show donor view" Margin="10" FontSize="20" materialDesign:ShadowAssist.ShadowAnimationDuration="0:0:0.5"/>
             </StackPanel>
         </GroupBox>
         <GroupBox Grid.Column="1">
