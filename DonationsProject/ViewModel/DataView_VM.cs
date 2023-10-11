@@ -37,6 +37,9 @@ namespace DonationsProject.ViewModel
         public ICommand ShowYearBeforeCommand { get; set; }
         public ICommand ShowYearAfterCommand { get; set; }
         public ICommand ShowTotalSummaryCommand { get; set; }
+        public ICommand ShowPieChartCommand { get; set; }
+        public ICommand ShowLineChartCommand { get; set; }
+        public ICommand ShowBarChartCommand { get; set; }
 
         private List<object> ViewModels = new List<object>();
 
@@ -58,29 +61,39 @@ namespace DonationsProject.ViewModel
         {
             OnPropertyChanged(nameof(YearBefore));
             OnPropertyChanged(nameof(YearAfter));
-        }   
+        }
 
         public DataView_VM()
         {
             ShowYearAfterCommand = new RelayCommand(ShowYearAfter);
             ShowYearBeforeCommand = new RelayCommand(ShowYearBefore);
             ShowTotalSummaryCommand = new RelayCommand(ShowTotalSummary);
+
+            ShowPieChartCommand = new RelayCommand(ShowPieChart);
+            ShowLineChartCommand = new RelayCommand(ShowLineChart);
+            ShowBarChartCommand = new RelayCommand(ShowBarChart);
             YearBefore = DateTime.Now.AddYears(-1);
             YearAfter = DateTime.Now.AddYears(1);
         }
 
         public async void ShowYearBefore()
         {
-            await PartySummary_VM.Instance.ShowYear(YearBefore);
+            if (CurrentViewModel is PartySummary_UC)
+            {
+                await PartySummary_VM.Instance.ShowYear(YearBefore);
+            }
             YearAfter = YearAfter.AddYears(-1);
             YearBefore = YearBefore.AddYears(-1);
-            
+
             PropertyDateChanged();
         }
 
         public async void ShowYearAfter()
         {
-            await PartySummary_VM.Instance.ShowYear(YearAfter);
+            if (CurrentViewModel is PartySummary_UC)
+            {
+                await PartySummary_VM.Instance.ShowYear(YearAfter);
+            }
             YearBefore = YearBefore.AddYears(1);
             YearAfter = YearAfter.AddYears(1);
             PropertyDateChanged();
@@ -88,11 +101,24 @@ namespace DonationsProject.ViewModel
 
         public async void ShowTotalSummary()
         {
-            await PartySummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
+            if (CurrentViewModel is PartySummary_UC)
+            {
+                await PartySummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
+            }
             PropertyDateChanged();
         }
 
-        public void ShowDonorView()
+        public async void ShowPieChart()
+        {
+            
+        }
+
+        public async void ShowLineChart()
+        {
+
+        }
+
+        public async void ShowBarChart()
         {
 
         }

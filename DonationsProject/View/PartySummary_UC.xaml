@@ -34,7 +34,7 @@
                     <lvc:DefaultLegend/>
                 </lvc:PieChart.ChartLegend>
             </lvc:PieChart>
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Right"  Margin="0,0,100,0">
+            <StackPanel Orientation="Vertical" HorizontalAlignment="Right"  Margin="0,-100,100,0">
                 <StackPanel Orientation="Horizontal">
                     <TextBlock Text="Total Sum of donations: " FontSize="20" FontWeight="Bold" />
                     <TextBlock Text="{Binding TotalAmount}" FontSize="20" FontWeight="Bold" />
