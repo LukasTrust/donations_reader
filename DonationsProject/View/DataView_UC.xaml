@@ -12,40 +12,16 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Orientation="Horizontal" Grid.Row="0">
-            <Button HorizontalAlignment="Stretch" Command="{Binding ShowYearBeforeCommand}" 
-                     Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}" Margin="10, 10, 0, 0" FontSize="20">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Show the year before "/>
-                    <TextBlock Text="{Binding YearBefore.Year}" />
-                </StackPanel>
-            </Button>
-
-            <Button HorizontalAlignment="Stretch" Command="{Binding ShowYearAfterCommand}" 
-                    Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}" Margin="10, 10, 0, 0" FontSize="20">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Show the year after " />
-                    <TextBlock Text="{Binding YearAfter.Year}" />
-                </StackPanel>
-            </Button>
-
-            <Button HorizontalAlignment="Stretch" Command="{Binding ShowTotalSummaryCommand}" 
-                    Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}" Margin="10, 10, 0, 0" FontSize="20">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Show total summary" />
-                </StackPanel>
-            </Button>
-        </StackPanel>
-
-        <TabControl Grid.Row="1" Width="300" HorizontalAlignment="Left" materialDesign:ColorZoneAssist.Mode="PrimaryLight" Margin="10, 0, 0, 10" >
-            <TabItem Header="Pie chart" />
-
+        
+        <TabControl Grid.Row="1" materialDesign:ColorZoneAssist.Mode="PrimaryLight" Margin="10, 0, 0, 10" >
+            <TabItem Header="Pie chart">
+                <ContentControl Content="{Binding PieChartPartySummary}"/>
+            </TabItem>
             <TabItem Header="Line char" />
 
             <TabItem Header="Bar char" />
 
         </TabControl>
 
-        <ContentControl Grid.Row="2" Content="{Binding CurrentViewModel}"/>
     </Grid>
 </UserControl>

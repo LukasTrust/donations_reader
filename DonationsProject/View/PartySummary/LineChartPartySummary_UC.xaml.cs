@@ -12,21 +12,17 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using DonationsProject.ViewModel;
 
-namespace DonationsProject.View
+namespace DonationsProject.View.PartySummary
 {
     /// <summary>
-    /// Interaction logic for PartySummary_UC.xaml
+    /// Interaction logic for LineChartPartySummary_UC.xaml
     /// </summary>
-    public partial class PartySummary_UC : UserControl
+    public partial class LineChartPartySummary_UC : UserControl
     {
-        public PartySummary_UC()
+        public LineChartPartySummary_UC()
         {
             InitializeComponent();
-            DataContext = PartySummary_VM.Instance;
         }
-
-
     }
 }

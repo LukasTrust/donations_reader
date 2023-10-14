@@ -141,7 +141,8 @@
     <Compile Include="Classes\Utils\RelayCommandWithParamter.cs" />
     <Compile Include="ViewModel\DataView_VM.cs" />
     <Compile Include="ViewModel\MainWindow_VM.cs" />
-    <Compile Include="ViewModel\PartySummary_VM.cs" />
+    <Compile Include="ViewModel\PartySummary_VMs\LineChartPartySummary_VM.cs" />
+    <Compile Include="ViewModel\PartySummary_VMs\PieChartPartySummary_VM.cs" />
     <Compile Include="View\DataView_UC.xaml.cs">
       <DependentUpon>DataView_UC.xaml</DependentUpon>
     </Compile>
@@ -156,8 +157,11 @@
     <Compile Include="Classes\Objects\Donation.cs" />
     <Compile Include="Classes\Website\DonationTableParser.cs" />
     <Compile Include="Classes\Website\WebsiteCrawler.cs" />
-    <Compile Include="View\PartySummary_UC.xaml.cs">
-      <DependentUpon>PartySummary_UC.xaml</DependentUpon>
+    <Compile Include="View\PartySummary\LineChartPartySummary_UC.xaml.cs">
+      <DependentUpon>LineChartPartySummary_UC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\PartySummary\PieChartPartySummary_UC.xaml.cs">
+      <DependentUpon>PieChartPartySummary_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\StartView_UC.xaml.cs">
       <DependentUpon>StartView_UC.xaml</DependentUpon>
@@ -170,7 +174,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="View\PartySummary_UC.xaml">
+    <Page Include="View\PartySummary\LineChartPartySummary_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PartySummary\PieChartPartySummary_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

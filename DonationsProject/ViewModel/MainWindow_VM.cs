@@ -85,9 +85,10 @@ namespace DonationsProject.ViewModel
             }
             foreach (object vm in ViewModels)
             {
-                if (vm is PartySummary_UC)
+                if (vm is DataView_UC)
                 {
                     CurrentViewModel = vm;
+                    await DataView_VM.Instance.ShowPartyView();
                     return;
                 }
             }
@@ -104,8 +105,18 @@ namespace DonationsProject.ViewModel
                 await DonorSummary.CreateDonors(Donation.Donations);
                 await PartySummary.CreateParties(Donation.Donations);
             }
-            
+            foreach (object vm in ViewModels)
+            {
+                if (vm is DataView_UC)
+                {
+                    CurrentViewModel = vm;
+
+                    return;
+                }
+            }
             CurrentViewModel = new DataView_UC();
+
+            ViewModels.Add(CurrentViewModel);
         }
     }
 }

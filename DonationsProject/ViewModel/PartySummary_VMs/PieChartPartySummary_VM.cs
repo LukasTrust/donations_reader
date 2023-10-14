@@ -13,20 +13,21 @@ using System.Windows.Media;
 
 namespace DonationsProject.ViewModel
 {
-    public class PartySummary_VM : INotifyPropertyChanged
+    public class PieChartPartySummary_VM : INotifyPropertyChanged
     {
-        public static PartySummary_VM Instance
+        public static PieChartPartySummary_VM Instance
         {
             get
             {
                 if (_Instance == null)
                 {
-                    _Instance = new PartySummary_VM();
+                    _Instance = new PieChartPartySummary_VM();
 
                 }
                 return _Instance;
             }
         }
+        private static PieChartPartySummary_VM _Instance { get; set; }
 
         protected void OnPropertyChanged(string propertyName)
         {
@@ -38,7 +39,9 @@ namespace DonationsProject.ViewModel
         public const string LabelPretext = "Donation of ";
 
         public ICommand ShowOtherPartyCommand { get; set; }
-        private static PartySummary_VM _Instance { get; set; }
+        public ICommand ShowYearBeforeCommand { get; set; }
+        public ICommand ShowYearAfterCommand { get; set; }
+        public ICommand ShowTotalSummaryCommand { get; set; }
 
         public List<SeriesCollection> PieViews { get; set; }
 
@@ -56,21 +59,58 @@ namespace DonationsProject.ViewModel
 
         public string Lable { get; set; }
 
+        public int CurrentLableIndex { get; set; }
+
         public string YearShown { get; set;}
 
-        public PartySummary_VM()
+        public DateTime YearBefore { get; set; }
+        public DateTime YearAfter { get; set; }
+
+        public PieChartPartySummary_VM()
         {
             PieViews = new List<SeriesCollection>();
             ShowOtherPartyCommand = new RelayCommandWithParamter<string>(ShowOtherParty);
+            ShowYearAfterCommand = new RelayCommand(ShowYearAfter);
+            ShowYearBeforeCommand = new RelayCommand(ShowYearBefore);
+            ShowTotalSummaryCommand = new RelayCommand(ShowTotalSummary);
+
+            YearBefore = DateTime.Now.AddYears(-1);
+            YearAfter = DateTime.Now.AddYears(1);
+        }
+
+        public async void ShowYearBefore()
+        {
+            await ViewModel.PieChartPartySummary_VM.Instance.ShowYear(YearBefore);
+
+            YearAfter = YearAfter.AddYears(-1);
+            YearBefore = YearBefore.AddYears(-1);
+
+            AllPropertyChanged();
+        }
+
+        public async void ShowYearAfter()
+        {
+            await ViewModel.PieChartPartySummary_VM.Instance.ShowYear(YearAfter);
+
+            YearBefore = YearBefore.AddYears(1);
+            YearAfter = YearAfter.AddYears(1);
+            AllPropertyChanged();
+        }
+
+        public async void ShowTotalSummary()
+        {
+            await ViewModel.PieChartPartySummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
+
+            AllPropertyChanged();
         }
 
         public void ShowOtherParty(string partName)
         {
-            int index = Lables.IndexOf(partName);
-            PieView = PieViews[index];
-            Lable = LabelPretext + Lables[index] + YearShown;
-            TotalAmount = TotalAmounts[index];
-            TotalDonation = TotalDonations[index];
+            CurrentLableIndex = Lables.IndexOf(partName);
+            PieView = PieViews[CurrentLableIndex];
+            Lable = LabelPretext + Lables[CurrentLableIndex] + YearShown;
+            TotalAmount = TotalAmounts[CurrentLableIndex];
+            TotalDonation = TotalDonations[CurrentLableIndex];
             AllPropertyChanged();
         }
 
@@ -110,10 +150,13 @@ namespace DonationsProject.ViewModel
                 }
                 PieViews.Add(seriesCollection);
             }
-            PieView = PieViews[0];
-            Lable = LabelPretext + Lables[0] + YearShown;
-            TotalAmount = TotalAmounts[0];
-            TotalDonation = TotalDonations[0];
+            
+
+            PieView = PieViews[CurrentLableIndex];
+            Lable = LabelPretext + Lables[CurrentLableIndex] + YearShown;
+            TotalAmount = TotalAmounts[CurrentLableIndex];
+            TotalDonation = TotalDonations[CurrentLableIndex]; 
+            AllPropertyChanged();
         }
 
         public void AllPropertyChanged()
@@ -122,6 +165,9 @@ namespace DonationsProject.ViewModel
             OnPropertyChanged(nameof(TotalAmount));
             OnPropertyChanged(nameof(PieView));
             OnPropertyChanged(nameof(TotalDonation));
+            OnPropertyChanged(nameof(Lables));
+            OnPropertyChanged(nameof(YearBefore));
+            OnPropertyChanged(nameof(YearAfter));
         }
 
         public async Task ShowYear(DateTime yearToShow)
