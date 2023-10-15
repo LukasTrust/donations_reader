@@ -23,6 +23,7 @@ namespace DonationsProject.View.PartySummary
         public LineChartPartySummary_UC()
         {
             InitializeComponent();
+            DataContext = ViewModel.LineChartPartySummary_VM.Instance;
         }
     }
 }

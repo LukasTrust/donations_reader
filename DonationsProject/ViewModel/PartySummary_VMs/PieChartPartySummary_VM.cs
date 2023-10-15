@@ -5,6 +5,7 @@ using LiveCharts.Wpf;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,6 +16,8 @@ namespace DonationsProject.ViewModel
 {
     public class PieChartPartySummary_VM : INotifyPropertyChanged
     {
+        #region Statics
+
         public static PieChartPartySummary_VM Instance
         {
             get
@@ -29,19 +32,22 @@ namespace DonationsProject.ViewModel
         }
         private static PieChartPartySummary_VM _Instance { get; set; }
 
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
-        public event PropertyChangedEventHandler PropertyChanged;
-
         public const string LabelPretext = "Donation of ";
+
+        #endregion
+
+        #region Commands
 
         public ICommand ShowOtherPartyCommand { get; set; }
         public ICommand ShowYearBeforeCommand { get; set; }
         public ICommand ShowYearAfterCommand { get; set; }
         public ICommand ShowTotalSummaryCommand { get; set; }
+
+        #endregion
+
+        #region Properties
+
+        public event PropertyChangedEventHandler PropertyChanged;
 
         public List<SeriesCollection> PieViews { get; set; }
 
@@ -49,22 +55,26 @@ namespace DonationsProject.ViewModel
 
         public List<double> TotalAmounts { get; set; }
 
-        public double TotalAmount { get; set; }
+        public string TotalAmount { get; set; }
 
         public List<int> TotalDonations { get; set; }
 
         public int TotalDonation { get; set; }
 
-        public List<string> Lables { get; set; }
+        public List<string> LablesParty { get; set; }
 
-        public string Lable { get; set; }
+        public string LableCurrent { get; set; }
 
         public int CurrentLableIndex { get; set; }
 
-        public string YearShown { get; set;}
+        public string YearShown { get; set; }
 
         public DateTime YearBefore { get; set; }
         public DateTime YearAfter { get; set; }
+
+        #endregion
+
+        #region Ctors
 
         public PieChartPartySummary_VM()
         {
@@ -77,6 +87,10 @@ namespace DonationsProject.ViewModel
             YearBefore = DateTime.Now.AddYears(-1);
             YearAfter = DateTime.Now.AddYears(1);
         }
+
+        #endregion
+
+        #region Methods
 
         public async void ShowYearBefore()
         {
@@ -106,68 +120,12 @@ namespace DonationsProject.ViewModel
 
         public void ShowOtherParty(string partName)
         {
-            CurrentLableIndex = Lables.IndexOf(partName);
+            CurrentLableIndex = LablesParty.IndexOf(partName);
             PieView = PieViews[CurrentLableIndex];
-            Lable = LabelPretext + Lables[CurrentLableIndex] + YearShown;
-            TotalAmount = TotalAmounts[CurrentLableIndex];
+            LableCurrent = LabelPretext + LablesParty[CurrentLableIndex] + YearShown;
+            TotalAmount = TotalAmounts[CurrentLableIndex].ToString("N1", new CultureInfo("de-DE"));
             TotalDonation = TotalDonations[CurrentLableIndex];
             AllPropertyChanged();
-        }
-
-        public async Task CreatePieCharts()
-        {
-            if (Lables == null)
-            {
-                Lables = new List<string>();
-                TotalAmounts = new List<double>();
-                TotalDonations = new List<int>();
-            }
-            else
-            {
-                Lables.Clear();
-                TotalAmounts.Clear();
-                PieViews.Clear();
-                TotalDonations.Clear();
-            }
-
-            await PartySummary.CreateParties(Donation.Donations);
-            foreach (PartySummary partySummary in PartySummary.PartiesSummary)
-            {
-                SeriesCollection seriesCollection = new SeriesCollection();
-                Lables.Add(partySummary.PartyName);
-                TotalAmounts.Add(partySummary.TotalAmount);
-                TotalDonations.Add(partySummary.TotalDonations);
-                foreach (KeyValuePair<string, double> amountPerDonor in partySummary.AmountPerDonor)
-                {
-                    PieSeries pieSeries = new PieSeries
-                    {
-                        Title = amountPerDonor.Key,
-                        Values = new ChartValues<double> { amountPerDonor.Value },
-                        DataLabels = true,
-                        LabelPosition = PieLabelPosition.OutsideSlice,
-                    };
-                    seriesCollection.Add(pieSeries);
-                }
-                PieViews.Add(seriesCollection);
-            }
-            
-
-            PieView = PieViews[CurrentLableIndex];
-            Lable = LabelPretext + Lables[CurrentLableIndex] + YearShown;
-            TotalAmount = TotalAmounts[CurrentLableIndex];
-            TotalDonation = TotalDonations[CurrentLableIndex]; 
-            AllPropertyChanged();
-        }
-
-        public void AllPropertyChanged()
-        {
-            OnPropertyChanged(nameof(Lable));
-            OnPropertyChanged(nameof(TotalAmount));
-            OnPropertyChanged(nameof(PieView));
-            OnPropertyChanged(nameof(TotalDonation));
-            OnPropertyChanged(nameof(Lables));
-            OnPropertyChanged(nameof(YearBefore));
-            OnPropertyChanged(nameof(YearAfter));
         }
 
         public async Task ShowYear(DateTime yearToShow)
@@ -184,5 +142,70 @@ namespace DonationsProject.ViewModel
             await CreatePieCharts();
             AllPropertyChanged();
         }
+
+        public async Task CreatePieCharts()
+        {
+            if (LablesParty == null)
+            {
+                LablesParty = new List<string>();
+                TotalAmounts = new List<double>();
+                TotalDonations = new List<int>();
+            }
+            else
+            {
+                LablesParty.Clear();
+                TotalAmounts.Clear();
+                PieViews.Clear();
+                TotalDonations.Clear();
+            }
+
+            await PartySummary.CreateParties(Donation.Donations);
+            foreach (PartySummary partySummary in PartySummary.PartiesSummary)
+            {
+                SeriesCollection seriesCollection = new SeriesCollection();
+                LablesParty.Add(partySummary.PartyName);
+                TotalAmounts.Add(partySummary.TotalAmount);
+                TotalDonations.Add(partySummary.TotalDonations);
+                foreach (KeyValuePair<string, double> amountPerDonor in partySummary.AmountPerDonor)
+                {
+                    PieSeries pieSeries = new PieSeries
+                    {
+                        Title = amountPerDonor.Key,
+                        Values = new ChartValues<double> { amountPerDonor.Value },
+                        DataLabels = true,
+                        LabelPoint = point => string.Format("{0:N0} € ({1:P})", point.Y, point.Participation),
+                        LabelPosition = PieLabelPosition.OutsideSlice,
+                    };
+                    seriesCollection.Add(pieSeries);
+                }
+                PieViews.Add(seriesCollection);
+            }
+
+
+            PieView = PieViews[CurrentLableIndex];
+            LableCurrent = LabelPretext + LablesParty[CurrentLableIndex] + YearShown;
+            TotalAmount = TotalAmounts[CurrentLableIndex].ToString("N1", new CultureInfo("de-DE"));
+            TotalDonation = TotalDonations[CurrentLableIndex];
+            AllPropertyChanged();
+        }
+
+        public void AllPropertyChanged()
+        {
+            OnPropertyChanged(nameof(LableCurrent));
+            OnPropertyChanged(nameof(TotalAmount));
+            OnPropertyChanged(nameof(PieView));
+            OnPropertyChanged(nameof(TotalDonation));
+            OnPropertyChanged(nameof(LablesParty));
+            OnPropertyChanged(nameof(YearBefore));
+            OnPropertyChanged(nameof(YearAfter));
+            OnPropertyChanged(nameof(LablesParty));
+        }
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        #endregion
     }
 }

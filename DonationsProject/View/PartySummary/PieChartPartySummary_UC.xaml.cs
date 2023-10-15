@@ -27,7 +27,5 @@ namespace DonationsProject.View
             DataContext = PieChartPartySummary_VM.Instance;
             UpdateLayout();
         }
-
-
     }
 }

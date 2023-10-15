@@ -12,13 +12,14 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        
+
         <TabControl Grid.Row="1" materialDesign:ColorZoneAssist.Mode="PrimaryLight" Margin="10, 0, 0, 10" >
             <TabItem Header="Pie chart">
                 <ContentControl Content="{Binding PieChartPartySummary}"/>
             </TabItem>
-            <TabItem Header="Line char" />
-
+            <TabItem Header="Line char" >
+                <ContentControl Content="{Binding LineChartPartySummary}" />
+            </TabItem>
             <TabItem Header="Bar char" />
 
         </TabControl>
