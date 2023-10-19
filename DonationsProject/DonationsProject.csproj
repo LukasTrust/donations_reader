@@ -141,6 +141,7 @@
     <Compile Include="Classes\Utils\RelayCommandWithParamter.cs" />
     <Compile Include="ViewModel\DataView_VM.cs" />
     <Compile Include="ViewModel\MainWindow_VM.cs" />
+    <Compile Include="ViewModel\PartySummary_VMs\BarChartPartySummary_VM.cs" />
     <Compile Include="ViewModel\PartySummary_VMs\LineChartPartySummary_VM.cs" />
     <Compile Include="ViewModel\PartySummary_VMs\PieChartPartySummary_VM.cs" />
     <Compile Include="View\DataView_UC.xaml.cs">
@@ -157,6 +158,9 @@
     <Compile Include="Classes\Objects\Donation.cs" />
     <Compile Include="Classes\Website\DonationTableParser.cs" />
     <Compile Include="Classes\Website\WebsiteCrawler.cs" />
+    <Compile Include="View\PartySummary\BarChartPartySummary_UC.xaml.cs">
+      <DependentUpon>BarChartPartySummary_UC.xaml</DependentUpon>
+    </Compile>
     <Compile Include="View\PartySummary\LineChartPartySummary_UC.xaml.cs">
       <DependentUpon>LineChartPartySummary_UC.xaml</DependentUpon>
     </Compile>
@@ -171,6 +175,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="View\MainWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\PartySummary\BarChartPartySummary_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

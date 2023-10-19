@@ -1,6 +1,7 @@
 ﻿using DonationsProject.Classes.Utils;
 using DonationsProject.View;
 using DonationsProject.View.PartySummary;
+using DonationsProject.ViewModel.PartySummary_VMs;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -58,6 +59,17 @@ namespace DonationsProject.ViewModel
             }
         }
 
+        private BarChartPartySummary_UC _BarChartPartySummary;
+        public BarChartPartySummary_UC BarChartPartySummary
+        {
+            get { return _BarChartPartySummary; }
+            set
+            {
+                _BarChartPartySummary = value;
+                OnPropertyChanged(nameof(BarChartPartySummary));
+            }
+        }
+
         public DataView_VM()
         {
             
@@ -73,10 +85,16 @@ namespace DonationsProject.ViewModel
             {
                 LineChartPartySummary = new LineChartPartySummary_UC();
             }
+            if (BarChartPartySummary == null)
+            {
+                BarChartPartySummary = new BarChartPartySummary_UC();
+            }
 
             await PieChartPartySummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
 
             await LineChartPartySummary_VM.Instance.CreateLineCharts();
+
+            await BarChartPartySummary_VM.Instance.CreatBarCharts();
         }
     }
 }

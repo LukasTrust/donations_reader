@@ -40,9 +40,9 @@ namespace DonationsProject.ViewModel
             LablesParty = new List<string>();
         }
 
-        public ICommand ShowOtherPartyCommand { get; set; }
-
         public event PropertyChangedEventHandler PropertyChanged;
+
+        public ICommand ShowOtherPartyCommand { get; set; }
 
         public List<string> YearLabels { get; set; }
 

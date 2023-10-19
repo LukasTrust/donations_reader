@@ -20,7 +20,9 @@
             <TabItem Header="Line char" >
                 <ContentControl Content="{Binding LineChartPartySummary}" />
             </TabItem>
-            <TabItem Header="Bar char" />
+            <TabItem Header="Bar char" >
+                <ContentControl Content="{Binding BarChartPartySummary}" />
+            </TabItem>
 
         </TabControl>
 
