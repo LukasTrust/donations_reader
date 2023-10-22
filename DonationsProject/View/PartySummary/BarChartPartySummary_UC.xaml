@@ -7,20 +7,55 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Grid>
-        <lvc:CartesianChart Height="800" x:Name="LineChart">
-            <lvc:CartesianChart.Series>
-                <lvc:ColumnSeries Values="{Binding SeriesViews}">
-                    
-                </lvc:ColumnSeries>
-            </lvc:CartesianChart.Series>
-            
-            <lvc:CartesianChart.AxisY>
-                <lvc:Axis Title="Amount in €" x:Name="YAxis" />
-            </lvc:CartesianChart.AxisY>
-            
-            <lvc:CartesianChart.AxisX>
-                <lvc:Axis Title="Party" />
-            </lvc:CartesianChart.AxisX>
-        </lvc:CartesianChart>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Horizontal">
+                <Button HorizontalAlignment="Stretch" Command="{Binding ShowYearBeforeCommand}" 
+                        Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}" Margin="0, 10, 0, 10" FontSize="20">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show the year before "/>
+                        <TextBlock Text="{Binding YearBefore.Year}" />
+                    </StackPanel>
+                </Button>
+
+                <Button HorizontalAlignment="Stretch" Command="{Binding ShowYearAfterCommand}" 
+                        Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}" Margin="10, 10, 0, 10" FontSize="20">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show the year after " />
+                        <TextBlock Text="{Binding YearAfter.Year}" />
+                    </StackPanel>
+                </Button>
+
+                <Button HorizontalAlignment="Stretch" Command="{Binding ShowTotalSummaryCommand}" 
+                        Style="{StaticResource MaterialDesignRaisedSecondaryLightButton}" Margin="10, 10, 0, 10" FontSize="20">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Show total summary" />
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+
+            <lvc:CartesianChart Height="850" x:Name="LineChart">
+                <lvc:CartesianChart.Series>
+                    <lvc:ColumnSeries Values="{Binding BarView}" DataLabels="True">
+                        <lvc:ColumnSeries.DataLabelsTemplate>
+                            <DataTemplate>
+                                <TextBlock Text="{Binding Path=Value}" Foreground="Red" FontSize="16"/>
+                            </DataTemplate>
+                        </lvc:ColumnSeries.DataLabelsTemplate>
+                    </lvc:ColumnSeries>
+                </lvc:CartesianChart.Series>
+
+                <lvc:CartesianChart.AxisY>
+                    <lvc:Axis Title="Amount in €" x:Name="YAxis" />
+                </lvc:CartesianChart.AxisY>
+
+                <lvc:CartesianChart.AxisX>
+                    <lvc:Axis Title="{Binding LableCurrent}" Labels="{Binding LablesParty}" >
+                        <lvc:Axis.Separator>
+                            <lvc:Separator Step="1" />
+                        </lvc:Axis.Separator>
+                    </lvc:Axis>
+                </lvc:CartesianChart.AxisX>
+            </lvc:CartesianChart>
+        </StackPanel>
     </Grid>
 </UserControl>

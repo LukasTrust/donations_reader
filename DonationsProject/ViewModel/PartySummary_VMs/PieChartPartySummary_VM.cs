@@ -94,7 +94,7 @@ namespace DonationsProject.ViewModel
 
         public async void ShowYearBefore()
         {
-            await ViewModel.PieChartPartySummary_VM.Instance.ShowYear(YearBefore);
+            await PieChartPartySummary_VM.Instance.ShowYear(YearBefore);
 
             YearAfter = YearAfter.AddYears(-1);
             YearBefore = YearBefore.AddYears(-1);
@@ -104,7 +104,7 @@ namespace DonationsProject.ViewModel
 
         public async void ShowYearAfter()
         {
-            await ViewModel.PieChartPartySummary_VM.Instance.ShowYear(YearAfter);
+            await PieChartPartySummary_VM.Instance.ShowYear(YearAfter);
 
             YearBefore = YearBefore.AddYears(1);
             YearAfter = YearAfter.AddYears(1);
@@ -113,7 +113,7 @@ namespace DonationsProject.ViewModel
 
         public async void ShowTotalSummary()
         {
-            await ViewModel.PieChartPartySummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
+            await PieChartPartySummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
 
             AllPropertyChanged();
         }

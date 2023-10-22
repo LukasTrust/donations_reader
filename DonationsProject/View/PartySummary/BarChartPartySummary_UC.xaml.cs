@@ -1,4 +1,5 @@
-﻿using System;
+﻿using DonationsProject.ViewModel.PartySummary_VMs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,6 +24,9 @@ namespace DonationsProject.View.PartySummary
         public BarChartPartySummary_UC()
         {
             InitializeComponent();
+            DataContext = BarChartPartySummary_VM.Instance;
+            Func<double, string> formatFunc = (x) => string.Format("{0:N}", x);
+            YAxis.LabelFormatter = formatFunc;
         }
     }
 }
