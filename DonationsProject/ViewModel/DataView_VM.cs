@@ -29,13 +29,6 @@ namespace DonationsProject.ViewModel
 
         private static DataView_VM _Instance { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-
-        protected void OnPropertyChanged(string propertyName)
-        {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-        }
-
         private LineChartPartySummary_UC _LineChartPartySummary;
 
         public LineChartPartySummary_UC LineChartPartySummary
@@ -70,13 +63,58 @@ namespace DonationsProject.ViewModel
             }
         }
 
+        private bool _IsPartyViewVisible;
+
+        public bool IsPartyViewVisible
+        {
+            get { return _IsPartyViewVisible; }
+            set
+            {
+                _IsPartyViewVisible = value;
+                OnPropertyChanged(nameof(IsPartyViewVisible));
+            }
+        }
+
+        private bool _IsDonorViewVisible;
+
+        public bool IsDonorViewVisible
+        {
+            get { return _IsDonorViewVisible; }
+            set
+            {
+                _IsDonorViewVisible = value;
+                OnPropertyChanged(nameof(IsDonorViewVisible));
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public DataView_VM()
         {
-            
+
+        }
+
+        public async Task AllPropertiesChanged()
+        {
+            await Task.Run(() =>
+            {
+                OnPropertyChanged(nameof(IsPartyViewVisible));
+                OnPropertyChanged(nameof(IsDonorViewVisible));
+            });
         }
 
         public async Task ShowPartyView()
         {
+            IsDonorViewVisible = false;
+            IsPartyViewVisible = true;
+
+            await AllPropertiesChanged();
+
             if (PieChartPartySummary == null)
             {
                 PieChartPartySummary = new PieChartPartySummary_UC();
@@ -95,6 +133,14 @@ namespace DonationsProject.ViewModel
             await LineChartPartySummary_VM.Instance.CreateLineCharts();
 
             await BarChartPartySummary_VM.Instance.CreatBarCharts();
+        }
+
+        public async Task ShowDonorView()
+        {
+            IsDonorViewVisible = true;
+            IsPartyViewVisible = false;
+
+            await AllPropertiesChanged();
         }
     }
 }

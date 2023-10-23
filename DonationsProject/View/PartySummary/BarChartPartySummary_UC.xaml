@@ -36,11 +36,6 @@
             <lvc:CartesianChart Height="850" x:Name="LineChart">
                 <lvc:CartesianChart.Series>
                     <lvc:ColumnSeries Values="{Binding BarView}" DataLabels="True">
-                        <lvc:ColumnSeries.DataLabelsTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Path=Value}" Foreground="Red" FontSize="16"/>
-                            </DataTemplate>
-                        </lvc:ColumnSeries.DataLabelsTemplate>
                     </lvc:ColumnSeries>
                 </lvc:CartesianChart.Series>
 

@@ -110,12 +110,12 @@ namespace DonationsProject.ViewModel
                 if (vm is DataView_UC)
                 {
                     CurrentViewModel = vm;
-
+                    await DataView_VM.Instance.ShowDonorView();
                     return;
                 }
             }
             CurrentViewModel = new DataView_UC();
-
+            await DataView_VM.Instance.ShowDonorView();
             ViewModels.Add(CurrentViewModel);
         }
     }
