@@ -141,12 +141,16 @@
     <Compile Include="Classes\Utils\RelayCommand.cs" />
     <Compile Include="Classes\Utils\RelayCommandWithParamter.cs" />
     <Compile Include="ViewModel\DataView_VM.cs" />
+    <Compile Include="ViewModel\DonorSummary_VMs\PieChartDonorSummary_VM.cs" />
     <Compile Include="ViewModel\MainWindow_VM.cs" />
     <Compile Include="ViewModel\PartySummary_VMs\BarChartPartySummary_VM.cs" />
     <Compile Include="ViewModel\PartySummary_VMs\LineChartPartySummary_VM.cs" />
     <Compile Include="ViewModel\PartySummary_VMs\PieChartPartySummary_VM.cs" />
     <Compile Include="View\DataView_UC.xaml.cs">
       <DependentUpon>DataView_UC.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="View\DonorView\PieChartDonorSummary_UC.xaml.cs">
+      <DependentUpon>PieChartDonorSummary_UC.xaml</DependentUpon>
     </Compile>
     <Compile Include="View\MainWindow.xaml.cs">
       <DependentUpon>MainWindow.xaml</DependentUpon>
@@ -172,6 +176,10 @@
       <DependentUpon>StartView_UC.xaml</DependentUpon>
     </Compile>
     <Page Include="View\DataView_UC.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="View\DonorView\PieChartDonorSummary_UC.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

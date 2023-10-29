@@ -1,6 +1,8 @@
 ﻿using DonationsProject.Classes.Utils;
 using DonationsProject.View;
+using DonationsProject.View.DonorView;
 using DonationsProject.View.PartySummary;
+using DonationsProject.ViewModel.DonorSummary_VMs;
 using DonationsProject.ViewModel.PartySummary_VMs;
 using System;
 using System.Collections.Generic;
@@ -60,6 +62,18 @@ namespace DonationsProject.ViewModel
             {
                 _BarChartPartySummary = value;
                 OnPropertyChanged(nameof(BarChartPartySummary));
+            }
+        }
+
+        private PieChartDonorSummary_UC _PieChartDonorSummary;
+
+        public PieChartDonorSummary_UC PieChartDonorSummary
+        {
+            get { return _PieChartDonorSummary; }
+            set
+            {
+                _PieChartDonorSummary = value;
+                OnPropertyChanged(nameof(PieChartDonorSummary));
             }
         }
 
@@ -141,6 +155,13 @@ namespace DonationsProject.ViewModel
             IsPartyViewVisible = false;
 
             await AllPropertiesChanged();
+
+            if (PieChartDonorSummary == null)
+            {
+                PieChartDonorSummary = new PieChartDonorSummary_UC();
+            }   
+
+            await PieChartDonorSummary_VM.Instance.ShowYear(new DateTime(0001, 1, 1));
         }
     }
 }

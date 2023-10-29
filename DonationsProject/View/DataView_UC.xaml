@@ -35,7 +35,7 @@
         <TabControl Grid.Row="1" materialDesign:ColorZoneAssist.Mode="PrimaryLight" Margin="10, 0, 0, 10" 
             Visibility="{Binding IsDonorViewVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
             <TabItem Header="Pie chart">
-                <ContentControl Content="{Binding }"/>
+                <ContentControl Content="{Binding PieChartDonorSummary}"/>
             </TabItem>
             <TabItem Header="Line char" >
                 <ContentControl Content="{Binding }" />

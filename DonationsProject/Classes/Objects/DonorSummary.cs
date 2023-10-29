@@ -22,7 +22,7 @@ namespace DonationsProject.Classes.Objects
         public Dictionary<string, double> AmountPerParty { get; set; }
         public List<string> DistinctParties { get; set; }
         public List<Donation> Donations { get; set; }
-        public DateTime YearToShow { get; set; }
+        public static DateTime YearToShow { get; set; }
         public TimeSpan AverageTimeBetweenDonations { get; set; }
 
         #endregion
@@ -40,6 +40,7 @@ namespace DonationsProject.Classes.Objects
 
         public static async Task CreateDonors(List<Donation> donations)
         {
+            DonorsSummary.Clear();
             List<string> donors = donations.Select(d => d.Donor).Distinct().ToList();
             foreach (string donor in donors)
             {
@@ -53,13 +54,13 @@ namespace DonationsProject.Classes.Objects
         public static async Task FillDataObject(DonorSummary donorSummary)
         {
             List<Donation> donations = donorSummary.Donations;
-            if (donorSummary.YearToShow.Year != 0001)
+            if (YearToShow.Year != 0001)
             {
-                donations = donations.Where(d => d.DonationDate.Year.Equals(donorSummary.YearToShow.Year)).ToList();
+                donations = donations.Where(d => d.DonationDate.Year.Equals(YearToShow.Year)).ToList();
             }
 
             donorSummary.TotalDonations = donations.Count;
-            donorSummary.DistinctParties = donorSummary.Donations.Select(d => d.Party).Distinct().ToList();
+            donorSummary.DistinctParties = donations.Select(d => d.Party).Distinct().ToList();
             donorSummary.DonationsCountPerParty = await GetDonationsCountPerParty(donorSummary);
             donorSummary.AmountPerParty = await GetAmountPerParty(donorSummary);
             donorSummary.TotalAmount = donations.Sum(d => d.Amount);
@@ -96,17 +97,17 @@ namespace DonationsProject.Classes.Objects
 
         public static async Task SetYearToShow(bool UpOrDown, DonorSummary donorSummary)
         {
-            if (donorSummary.YearToShow == null)
+            if (YearToShow == null)
             {
-                donorSummary.YearToShow = DateTime.Now;
+                YearToShow = DateTime.Now;
             }
             else if (UpOrDown)
             {
-                donorSummary.YearToShow.AddYears(1);
+                YearToShow.AddYears(1);
             }
             else
             {
-                donorSummary.YearToShow.AddYears(-1);
+                YearToShow.AddYears(-1);
             }
             await FillDataObject(donorSummary);
         }
