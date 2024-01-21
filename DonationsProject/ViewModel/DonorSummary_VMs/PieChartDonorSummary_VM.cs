@@ -52,7 +52,6 @@ namespace DonationsProject.ViewModel.DonorSummary_VMs
         public int CurrentLableIndex { get; set; }
         public string LableCurrent { get; set; }
         public List<string> LablesDonor { get; set; }
-
         public DateTime YearBefore { get; set; }
         public DateTime YearAfter { get; set; }
 
