@@ -7,6 +7,7 @@
 - [Funktionen](#funktionen)
 - [Installation](#installation)
 - [Verwendung](#verwendung)
+- [Screenshots](#screenshots)
 - [Technologien](#technologien)
 
 ## Hintergrund
@@ -37,10 +38,11 @@ Ich habe dieses Projekt im Rahmen meines Praktikums begonnen, um meine Kenntniss
 1. **Daten abrufen:** Starte die Anwendung und klicke auf den "Daten abrufen" Button, um die neuesten Spenden aus dem Bundestag abzurufen.
 2. **Daten anzeigen:** Verwende die verschiedenen Ansichten in der Anwendung, um die abgerufenen Daten grafisch darzustellen.
 
+## Screenshots
+
 ## Technologien
 - **Programmiersprache:** C#
 - **Framework:** .NET Core, WPF
 - **Datenbank:** Postgres
 - **Libraries:** 
-    - HtmlAgilityPack (zum Parsen der Webseite)
     - LiveCharts (für die Diagramme)
